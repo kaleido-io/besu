@@ -1,6 +1,19 @@
 # Changelog
 
-## 23.4.2
+## 23.4.4
+
+### Breaking Changes
+
+### Additions and Improvements
+
+### Bug Fixes
+- Use the node's configuration to determine if DNS enode URLs are allowed in calls to `admin_addPeer` and `admin_removePeer` [#5584](https://github.com/hyperledger/besu/pull/5584)
+
+### Download Links
+
+---
+
+## 23.4.3
 
 ### Breaking Changes
 - Move blockchain related variables in a dedicated storage, to pave the way to future optimizations [#5471](https://github.com/hyperledger/besu/pull/5471). The migration is performed automatically at startup,
@@ -20,6 +33,10 @@ and in case a rollback is needed, before installing a previous version, the migr
 - check to ensure storage and transactions are not closed prior to reading/writing [#5527](https://github.com/hyperledger/besu/pull/5527) 
 
 ### Download Links
+
+## 23.4.2
+
+- Was not released (failed burn-in test)
 
 ---
 

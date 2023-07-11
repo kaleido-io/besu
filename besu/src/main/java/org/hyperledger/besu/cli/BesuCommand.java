@@ -2080,7 +2080,7 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
             "--remote-connections-max-percentage"));
 
     // Check that block producer options work
-    if (!isMergeEnabled()) {
+    if (!isMergeEnabled() && getActualGenesisConfigOptions().isEthHash()) {
       CommandLineUtils.checkOptionDependencies(
           logger,
           commandLine,
@@ -2091,17 +2091,18 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
               "--min-gas-price",
               "--min-block-occupancy-ratio",
               "--miner-extra-data"));
+
+      // Check that mining options are able to work
+      CommandLineUtils.checkOptionDependencies(
+          logger,
+          commandLine,
+          "--miner-enabled",
+          !minerOptionGroup.isMiningEnabled,
+          asList(
+              "--miner-stratum-enabled",
+              "--Xminer-remote-sealers-limit",
+              "--Xminer-remote-sealers-hashrate-ttl"));
     }
-    // Check that mining options are able to work
-    CommandLineUtils.checkOptionDependencies(
-        logger,
-        commandLine,
-        "--miner-enabled",
-        !minerOptionGroup.isMiningEnabled,
-        asList(
-            "--miner-stratum-enabled",
-            "--Xminer-remote-sealers-limit",
-            "--Xminer-remote-sealers-hashrate-ttl"));
 
     CommandLineUtils.failIfOptionDoesntMeetRequirement(
         commandLine,

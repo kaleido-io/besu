@@ -1,5 +1,16 @@
 # Changelog
 
+## 23.4.5
+
+### Breaking Changes
+
+### Additions and Improvements
+
+### Bug Fixes
+ - Remove miner-related option warnings if the change isn't using Ethash consensus algorithm [#5669](https://github.com/hyperledger/besu/pull/5669)
+
+### Download Links
+
 ## 23.4.4
 
 ### Breaking Changes

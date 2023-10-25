@@ -31,6 +31,9 @@ import static org.hyperledger.besu.ethereum.p2p.config.DefaultDiscoveryConfigura
 import static org.hyperledger.besu.ethereum.p2p.config.DefaultDiscoveryConfiguration.SEPOLIA_BOOTSTRAP_NODES;
 import static org.hyperledger.besu.ethereum.p2p.config.DefaultDiscoveryConfiguration.SEPOLIA_DISCOVERY_URL;
 import static org.hyperledger.besu.plugin.services.storage.DataStorageFormat.BONSAI;
+import static org.hyperledger.besu.ethereum.worldstate.DataStorageFormat.BONSAI;
+import static org.hyperledger.besu.nat.kubernetes.KubernetesNatManager.DEFAULT_BESU_SERVICE_NAME;
+import static org.hyperledger.besu.nat.kubernetes.KubernetesNatManager.DEFAULT_BESU_SERVICE_NAMESPACE;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
@@ -1301,6 +1304,154 @@ public class BesuCommandTest extends CommandTestAbstract {
     assertThat(commandErrorOutput.toString(UTF_8))
         .contains(
             "The `--Xdns-update-enabled` requires dns to be enabled. Either remove --Xdns-update-enabled or specify dns is enabled (--Xdns-enabled)");
+  }
+
+  @Test
+  public void helpShouldDisplayNatMethodInfo() {
+    parseCommand("--help");
+
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+
+    assertThat(commandOutput.toString(UTF_8)).contains("--nat-method");
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natMethodPropertyDefaultIsAuto() {
+    parseCommand();
+
+    verify(mockRunnerBuilder).natMethod(eq(NatMethod.AUTO));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natManagerServiceNamePropertyDefaultIsBesu() {
+    parseCommand();
+
+    verify(mockRunnerBuilder).natManagerServiceName(eq(DEFAULT_BESU_SERVICE_NAME));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natManagerServiceNamePropertyIsCorrectlyUpdated() {
+    final String serviceName = "besu-updated";
+    parseCommand("--Xnat-kube-service-name", serviceName);
+
+    verify(mockRunnerBuilder).natManagerServiceName(eq(serviceName));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natManagerServiceNameCannotBeUsedWithNatDockerMethod() {
+    parseCommand("--nat-method", "DOCKER", "--Xnat-kube-service-name", "besu-updated");
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8))
+        .contains(
+            "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name or select the KUBERNETES mode (via --nat--method=KUBERNETES)");
+  }
+
+  @Test
+  public void natManagerServiceNameCannotBeUsedWithNatNoneMethod() {
+    parseCommand("--nat-method", "NONE", "--Xnat-kube-service-name", "besu-updated");
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8))
+        .contains(
+            "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name or select the KUBERNETES mode (via --nat--method=KUBERNETES)");
+  }
+
+  @Test
+  public void natManagerServiceNamespacePropertyDefaultIsBesu() {
+    parseCommand();
+
+    verify(mockRunnerBuilder).natManagerServiceNamespace(eq(DEFAULT_BESU_SERVICE_NAMESPACE));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natManagerServiceNamespacePropertyIsCorrectlyUpdated() {
+    final String serviceNamespace = "besu-updated";
+    parseCommand("--Xnat-kube-service-namespace", serviceNamespace);
+
+    verify(mockRunnerBuilder).natManagerServiceNamespace(eq(serviceNamespace));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natManagerServiceNamespaceCannotBeUsedWithNatDockerMethod() {
+    parseCommand("--nat-method", "DOCKER", "--Xnat-kube-service-namespace", "besu-updated");
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8))
+        .contains(
+            "The `--Xnat-kube-service-namespace` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-namespace or select the KUBERNETES mode (via --nat--method=KUBERNETES)");
+  }
+
+  @Test
+  public void natManagerServiceNamespaceCannotBeUsedWithNatNoneMethod() {
+    parseCommand("--nat-method", "NONE", "--Xnat-kube-service-namespace", "besu-updated");
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8))
+        .contains(
+            "The `--Xnat-kube-service-namespace` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-namespace or select the KUBERNETES mode (via --nat--method=KUBERNETES)");
+  }
+
+  @Test
+  public void natMethodFallbackEnabledPropertyIsCorrectlyUpdatedWithKubernetes() {
+
+    parseCommand("--nat-method", "KUBERNETES", "--Xnat-method-fallback-enabled", "false");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(false));
+    parseCommand("--nat-method", "KUBERNETES", "--Xnat-method-fallback-enabled", "true");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(true));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natMethodFallbackEnabledPropertyIsCorrectlyUpdatedWithDocker() {
+
+    parseCommand("--nat-method", "DOCKER", "--Xnat-method-fallback-enabled", "false");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(false));
+    parseCommand("--nat-method", "DOCKER", "--Xnat-method-fallback-enabled", "true");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(true));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natMethodFallbackEnabledPropertyIsCorrectlyUpdatedWithUpnp() {
+
+    parseCommand("--nat-method", "UPNP", "--Xnat-method-fallback-enabled", "false");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(false));
+    parseCommand("--nat-method", "UPNP", "--Xnat-method-fallback-enabled", "true");
+    verify(mockRunnerBuilder).natMethodFallbackEnabled(eq(true));
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
+
+  @Test
+  public void natMethodFallbackEnabledCannotBeUsedWithAutoMethod() {
+    parseCommand("--nat-method", "AUTO", "--Xnat-method-fallback-enabled", "false");
+    Mockito.verifyNoInteractions(mockRunnerBuilder);
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8))
+        .contains(
+            "The `--Xnat-method-fallback-enabled` parameter cannot be used in AUTO mode. Either remove --Xnat-method-fallback-enabled or select another mode (via --nat--method=XXXX)");
   }
 
   @Test

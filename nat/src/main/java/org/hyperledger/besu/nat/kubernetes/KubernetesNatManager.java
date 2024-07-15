@@ -79,17 +79,24 @@ public class KubernetesNatManager extends AbstractNatManager {
 
       LOG.debug("Trying to update information using Kubernetes client SDK.");
       final ApiClient client = ClientBuilder.cluster().build();
+      LOG.debug("Kubernetes client built.");
 
       // set the global default api-client to the in-cluster one from above
       Configuration.setDefaultApiClient(client);
+      LOG.debug("Default API client set.");
 
       // the CoreV1Api loads default api-client from global configuration.
       final CoreV1Api api = new CoreV1Api();
+      LOG.debug("CoreV1Api initialized.");
       // invokes the CoreV1Api client
+      LOG.debug("Reading namespaced service: Name = {}, Namespace = {}", besuServiceName, besuServiceNamespace);
       final V1Service service =
           api.readNamespacedService(besuServiceName, besuServiceNamespace, null);
+      LOG.debug("Service read successfully: {}", service);
       updateUsingBesuService(service);
+      LOG.debug("Service updated successfully.");
     } catch (Exception e) {
+      LOG.error("Error during NAT manager startup: {}", e.getMessage(), e);
       throw new NatInitializationException(e.getMessage(), e);
     }
   }

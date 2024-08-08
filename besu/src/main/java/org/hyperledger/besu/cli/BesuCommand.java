@@ -31,6 +31,7 @@ import static org.hyperledger.besu.metrics.MetricsProtocol.PROMETHEUS;
 import static org.hyperledger.besu.metrics.prometheus.MetricsConfiguration.DEFAULT_METRICS_PORT;
 import static org.hyperledger.besu.metrics.prometheus.MetricsConfiguration.DEFAULT_METRICS_PUSH_PORT;
 import static org.hyperledger.besu.nat.kubernetes.KubernetesNatManager.DEFAULT_BESU_SERVICE_NAME;
+import static org.hyperledger.besu.nat.kubernetes.KubernetesNatManager.DEFAULT_BESU_SERVICE_NAMESPACE;
 
 import org.hyperledger.besu.BesuInfo;
 import org.hyperledger.besu.Runner;
@@ -1576,9 +1577,16 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
     if (!(natMethod.equals(NatMethod.AUTO) || natMethod.equals(NatMethod.KUBERNETES))) {
       if (!unstableNatOptions.getNatManagerServiceName().equals(DEFAULT_BESU_SERVICE_NAME)) {
         throw new ParameterException(
-            this.commandLine,
-            "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
-                + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
+                this.commandLine,
+                "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
+                        + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
+
+      }
+      if (!unstableNatOptions.getNatManagerServiceName().equals(DEFAULT_BESU_SERVICE_NAMESPACE)) {
+        throw new ParameterException(
+                this.commandLine,
+                "The `--Xnat-kube-service-namespace` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
+                        + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
       }
     }
     if (natMethod.equals(NatMethod.AUTO) && !unstableNatOptions.getNatMethodFallbackEnabled()) {
@@ -2255,6 +2263,7 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
             .p2pEnabled(p2pEnabled)
             .natMethod(natMethod)
             .natManagerServiceName(unstableNatOptions.getNatManagerServiceName())
+            .natManagerServiceNamespace(unstableNatOptions.getNatManagerServiceNamespace())
             .natMethodFallbackEnabled(unstableNatOptions.getNatMethodFallbackEnabled())
             .discovery(peerDiscoveryEnabled)
             .ethNetworkConfig(ethNetworkConfig)

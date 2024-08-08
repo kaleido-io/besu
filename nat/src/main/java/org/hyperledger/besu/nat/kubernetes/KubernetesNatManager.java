@@ -24,6 +24,10 @@ import org.hyperledger.besu.nat.core.exception.NatInitializationException;
 import org.hyperledger.besu.nat.kubernetes.service.KubernetesServiceType;
 import org.hyperledger.besu.nat.kubernetes.service.LoadBalancerBasedDetector;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +57,8 @@ public class KubernetesNatManager extends AbstractNatManager {
 
   public static final String DEFAULT_BESU_SERVICE_NAMESPACE = "besu";
 
+  private static final Path KUBERNETES_NAMESPACE_FILE = Paths.get("var/run/secrets/kubernetes.io/serviceaccount/namespace");
+
   private String internalAdvertisedHost;
   private final String besuServiceName;
   private final String besuServiceNamespace;
@@ -62,12 +68,17 @@ public class KubernetesNatManager extends AbstractNatManager {
    * Instantiates a new Kubernetes nat manager.
    *
    * @param besuServiceName the besu service name
-   * @param besuServiceNamespace the besu service namespace
    */
-  public KubernetesNatManager(final String besuServiceName, final String besuServiceNamespace) {
+  public KubernetesNatManager(final String besuServiceName) {
     super(NatMethod.KUBERNETES);
     this.besuServiceName = besuServiceName;
-    this.besuServiceNamespace = besuServiceNamespace;
+    String ns = DEFAULT_BESU_SERVICE_NAMESPACE;
+    try {
+      ns = Files.readString(KUBERNETES_NAMESPACE_FILE);
+    } catch (IOException ex) {
+      LOG.info("Failed to determine namespace via serviceaccount folder");
+    }
+    this.besuServiceNamespace = ns;
   }
 
   @Override

@@ -30,14 +30,6 @@ public class NatOptions {
           "Specify the name of the service that will be used by the nat manager in Kubernetes. (default: ${DEFAULT-VALUE})")
   private String natManagerServiceName = DEFAULT_BESU_SERVICE_NAME;
 
-  @SuppressWarnings({"FieldCanBeFinal", "FieldMayBeFinal"}) // PicoCLI requires non-final Strings.
-  @CommandLine.Option(
-      hidden = true,
-      names = {"--Xnat-kube-service-namespace"},
-      description =
-          "Specify the namespace of the service that will be used by the nat manager in Kubernetes. (default: ${DEFAULT-VALUE})")
-  private String natManagerServiceNamespace = DEFAULT_BESU_SERVICE_NAMESPACE;
-
   @CommandLine.Option(
       hidden = true,
       names = {"--Xnat-method-fallback-enabled"},
@@ -65,15 +57,6 @@ public class NatOptions {
    */
   public String getNatManagerServiceName() {
     return natManagerServiceName;
-  }
-
-  /**
-   * Gets nat manager service namespace.
-   *
-   * @return the nat manager service namespace
-   */
-  public String getNatManagerServiceNamespace() {
-    return natManagerServiceNamespace;
   }
 
   /**

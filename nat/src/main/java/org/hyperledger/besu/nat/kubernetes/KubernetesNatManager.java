@@ -75,9 +75,10 @@ public class KubernetesNatManager extends AbstractNatManager {
     String ns = besuServiceNamespace;
     if (ns.equals(DEFAULT_BESU_SERVICE_NAMESPACE)) {
       try {
+        LOG.debug("Reading namespace file from serviceaccount");
         ns = Files.readString(KUBERNETES_NAMESPACE_FILE);
       } catch (IOException ex) {
-        LOG.info("Failed to determine namespace via serviceaccount folder");
+        LOG.warn("Failed to determine namespace via serviceaccount token");
       }
     }
     this.besuServiceNamespace = ns;

@@ -1577,16 +1577,17 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
     if (!(natMethod.equals(NatMethod.AUTO) || natMethod.equals(NatMethod.KUBERNETES))) {
       if (!unstableNatOptions.getNatManagerServiceName().equals(DEFAULT_BESU_SERVICE_NAME)) {
         throw new ParameterException(
-                this.commandLine,
-                "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
-                        + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
-
+            this.commandLine,
+            "The `--Xnat-kube-service-name` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
+                + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
       }
-      if (!unstableNatOptions.getNatManagerServiceName().equals(DEFAULT_BESU_SERVICE_NAMESPACE)) {
+      if (!unstableNatOptions
+          .getNatManagerServiceNamespace()
+          .equals(DEFAULT_BESU_SERVICE_NAMESPACE)) {
         throw new ParameterException(
-                this.commandLine,
-                "The `--Xnat-kube-service-namespace` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-name"
-                        + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
+            this.commandLine,
+            "The `--Xnat-kube-service-namespace` parameter is only used in kubernetes mode. Either remove --Xnat-kube-service-namespace"
+                + " or select the KUBERNETES mode (via --nat-method=KUBERNETES)");
       }
     }
     if (natMethod.equals(NatMethod.AUTO) && !unstableNatOptions.getNatMethodFallbackEnabled()) {

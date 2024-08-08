@@ -32,10 +32,10 @@ public class NatOptions {
 
   @SuppressWarnings({"FieldCanBeFinal", "FieldMayBeFinal"}) // PicoCLI requires non-final Strings.
   @CommandLine.Option(
-          hidden = true,
-          names = {"--Xnat-kube-service-namespace"},
-          description =
-                  "Override the Kubernetes namespace of the service that will be used by the nat manager, useful for local development. (default: /var/run/secrets/kubernetes.io/serviceaccount/namespace if present, else ${DEFAULT-VALUE})")
+      hidden = true,
+      names = {"--Xnat-kube-service-namespace"},
+      description =
+          "Override the Kubernetes namespace of the service that will be used by the nat manager, useful for local development. (default: /var/run/secrets/kubernetes.io/serviceaccount/namespace if present, else ${DEFAULT-VALUE})")
   private String natManagerServiceNamespace = DEFAULT_BESU_SERVICE_NAMESPACE;
 
   @CommandLine.Option(

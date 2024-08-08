@@ -69,19 +69,22 @@ public class KubernetesNatManager extends AbstractNatManager {
    *
    * @param besuServiceName the besu service name
    */
-  public KubernetesNatManager(final String besuServiceName) {
+  public KubernetesNatManager(final String besuServiceName, final String besuServiceNamespace) {
     super(NatMethod.KUBERNETES);
     this.besuServiceName = besuServiceName;
-    String ns = DEFAULT_BESU_SERVICE_NAMESPACE;
-    try {
-      ns = Files.readString(KUBERNETES_NAMESPACE_FILE);
-    } catch (IOException ex) {
-      LOG.info("Failed to determine namespace via serviceaccount folder");
+    String ns = besuServiceNamespace;
+    if (ns.equals(DEFAULT_BESU_SERVICE_NAMESPACE)) {
+      try {
+        ns = Files.readString(KUBERNETES_NAMESPACE_FILE);
+      } catch (IOException ex) {
+        LOG.info("Failed to determine namespace via serviceaccount folder");
+      }
     }
     this.besuServiceNamespace = ns;
   }
 
-  @Override
+
+    @Override
   protected void doStart() throws NatInitializationException {
     LOG.info("Starting kubernetes NAT manager.");
     try {

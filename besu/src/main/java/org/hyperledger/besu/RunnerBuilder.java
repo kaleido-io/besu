@@ -170,7 +170,6 @@ public class RunnerBuilder {
   private int p2pListenPort;
   private NatMethod natMethod = NatMethod.AUTO;
   private String natManagerServiceName;
-  private String natManagerServiceNamespace;
   private boolean natMethodFallbackEnabled;
   private EthNetworkConfig ethNetworkConfig;
   private EthstatsOptions ethstatsOptions;
@@ -342,17 +341,6 @@ public class RunnerBuilder {
    */
   public RunnerBuilder natManagerServiceName(final String natManagerServiceName) {
     this.natManagerServiceName = natManagerServiceName;
-    return this;
-  }
-
-  /**
-   * Add Nat manager service namespace.
-   *
-   * @param natManagerServiceNamespace the nat manager service namespace
-   * @return the runner builder
-   */
-  public RunnerBuilder natManagerServiceNamespace(final String natManagerServiceNamespace) {
-    this.natManagerServiceNamespace = natManagerServiceNamespace;
     return this;
   }
 
@@ -1172,7 +1160,7 @@ public class RunnerBuilder {
             new DockerNatManager(p2pAdvertisedHost, p2pListenPort, jsonRpcConfiguration.getPort()));
       case KUBERNETES:
         return Optional.of(
-            new KubernetesNatManager(natManagerServiceName, natManagerServiceNamespace));
+            new KubernetesNatManager(natManagerServiceName));
       case NONE:
       default:
         return Optional.empty();

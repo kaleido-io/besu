@@ -30,7 +30,7 @@ public class KubernetesDetector implements NatMethodDetector {
   // https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#environment-variables
   private static final Optional<String> KUBERNETES_SERVICE_HOST =
       Optional.ofNullable(System.getenv("KUBERNETES_SERVICE_HOST"));
-  private static final Path KUBERNETES_WATERMARK_FILE = Paths.get("var/run/secrets/kubernetes.io");
+  private static final Path KUBERNETES_WATERMARK_FILE = Paths.get("/var/run/secrets/kubernetes.io");
 
   /** Default constructor */
   public KubernetesDetector() {}

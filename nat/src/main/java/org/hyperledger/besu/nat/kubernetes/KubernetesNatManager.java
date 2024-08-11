@@ -57,7 +57,7 @@ public class KubernetesNatManager extends AbstractNatManager {
 
   public static final String DEFAULT_BESU_SERVICE_NAMESPACE = "besu";
 
-  private static final Path KUBERNETES_NAMESPACE_FILE = Paths.get("var/run/secrets/kubernetes.io/serviceaccount/namespace");
+  private static final Path KUBERNETES_NAMESPACE_FILE = Paths.get("/var/run/secrets/kubernetes.io/serviceaccount/namespace");
 
   private String internalAdvertisedHost;
   private final String besuServiceName;
@@ -78,7 +78,7 @@ public class KubernetesNatManager extends AbstractNatManager {
         LOG.debug("Reading namespace file from serviceaccount");
         ns = Files.readString(KUBERNETES_NAMESPACE_FILE);
       } catch (IOException ex) {
-        LOG.warn("Failed to determine namespace via serviceaccount token");
+        LOG.warn("Failed to determine namespace via '{}' due to '{}'", KUBERNETES_NAMESPACE_FILE.toAbsolutePath(), ex.getMessage());
       }
     }
     this.besuServiceNamespace = ns;

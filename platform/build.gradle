@@ -95,6 +95,7 @@ dependencies {
     api 'info.picocli:picocli-codegen:4.7.6'
 
     api 'io.kubernetes:client-java:21.0.1-legacy'
+
     // Temporarily locking in to avoid https://github.com/netplex/json-smart-v2/issues/240. Note >= 2.4.9 is needed to avoid HIGH CVEs
     api 'net.minidev:json-smart:2.4.9'
 

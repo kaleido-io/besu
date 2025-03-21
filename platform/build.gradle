@@ -169,7 +169,7 @@ dependencies {
 
     api 'org.rocksdb:rocksdbjni:9.7.3'
 
-    api 'org.springframework.security:spring-security-crypto:6.3.3'
+    api 'org.springframework.security:spring-security-crypto:6.3.8'
 
     api 'org.wiremock:wiremock:3.9.1'
 

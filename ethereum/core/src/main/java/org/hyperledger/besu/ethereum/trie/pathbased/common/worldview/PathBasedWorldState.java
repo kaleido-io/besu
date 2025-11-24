@@ -307,6 +307,11 @@ public abstract class PathBasedWorldState
         public void rollback() {
           // no-op
         }
+
+        @Override
+        public void close() {
+          // no-op
+        }
       };
 
   protected static final SegmentedKeyValueStorageTransaction noOpSegmentedTx =
@@ -330,6 +335,11 @@ public abstract class PathBasedWorldState
 
         @Override
         public void rollback() {
+          // no-op
+        }
+
+        @Override
+        public void close() {
           // no-op
         }
       };

@@ -117,7 +117,7 @@ public class StackTraceMatchFilter extends AbstractFilter {
      * @param text the match string
      * @return this builder
      */
-    public StackTraceMatchFilter.Builder setText(final String regex) {
+    public StackTraceMatchFilter.Builder setText(final String text) {
       this.text = text;
       return this;
     }

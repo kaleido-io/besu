@@ -29,6 +29,13 @@ jar {
   }
 }
 
+tasks.withType(JavaCompile).configureEach {
+  options.compilerArgs += [
+    '-Alog4j.graalvm.groupId=org.hyperledger.besu',
+    '-Alog4j.graalvm.artifactId=besu-util'
+  ]
+}
+
 dependencies {
   api 'org.slf4j:slf4j-api'
 

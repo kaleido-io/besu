@@ -102,12 +102,23 @@ public class StackTraceMatchFilter extends AbstractFilter {
     }
 
     /**
-     * Set the string to match in the stack trace
+     * Set the string to match in the stack trace.
      *
      * @param text the match string
      * @return this builder
      */
     public StackTraceMatchFilter.Builder setMatchString(final String text) {
+      return setText(text);
+    }
+
+    /**
+     * Set the text to match in the stack trace. A public setter is required by newer versions of
+     * Log4j.
+     *
+     * @param text the match string
+     * @return this builder
+     */
+    public StackTraceMatchFilter.Builder setText(final String text) {
       this.text = text;
       return this;
     }

@@ -1,7 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.fasterxml.jackson:jackson-bom:2.18.2=classpath
+com.fasterxml.jackson:jackson-bom:2.18.6=classpath
 io.grpc:grpc-bom:1.70.0=classpath
 io.netty:netty-bom:4.2.8.Final=classpath
 io.opentelemetry:opentelemetry-bom:1.47.0=classpath

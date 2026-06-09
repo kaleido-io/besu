@@ -86,7 +86,15 @@ public class BftBlockCreator extends AbstractBlockCreator {
     if (protocolSpec.getWithdrawalsValidator() instanceof WithdrawalsValidator.AllowedWithdrawals) {
       return createEmptyWithdrawalsBlock(timestamp, parentHeader);
     } else {
-      return createBlock(Optional.empty(), Optional.empty(), timestamp, parentHeader);
+      return createBlock(
+          Optional.empty(),
+          Optional.empty(),
+          Optional.empty(),
+          Optional.of(BftHelpers.EXPECTED_MIX_HASH),
+          Optional.empty(),
+          timestamp,
+          true,
+          parentHeader);
     }
   }
 
@@ -113,7 +121,10 @@ public class BftBlockCreator extends AbstractBlockCreator {
         Optional.empty(),
         Optional.empty(),
         Optional.of(Collections.emptyList()),
+        Optional.of(BftHelpers.EXPECTED_MIX_HASH),
+        Optional.empty(),
         timestamp,
+        true,
         parentHeader);
   }
 

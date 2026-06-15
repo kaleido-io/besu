@@ -29,7 +29,7 @@ dependencyManagement {
 
     dependency 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-    dependencySet(group: 'com.github.tomakehurst', version: '2.35.0') {
+    dependencySet(group: 'com.github.tomakehurst', version: '2.35.1') {
       entry'wiremock-jre8-standalone'
       entry'wiremock-jre8'
     }

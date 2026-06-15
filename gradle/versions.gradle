@@ -82,7 +82,7 @@ dependencyManagement {
     dependency group: 'io.netty', name: 'netty-transport-native-kqueue', version:'4.1.100.Final', classifier: 'osx-x86_64'
     dependency 'io.netty:netty-transport-native-unix-common:4.1.100.Final'
 
-    dependency 'io.opentelemetry:opentelemetry-api:1.24.0'
+    dependency 'io.opentelemetry:opentelemetry-api:1.62.0'
     dependency 'io.opentelemetry:opentelemetry-exporter-otlp:1.24.0'
     dependency 'io.opentelemetry:opentelemetry-extension-trace-propagators:1.24.0'
     dependency 'io.opentelemetry.proto:opentelemetry-proto:0.19.0-alpha'

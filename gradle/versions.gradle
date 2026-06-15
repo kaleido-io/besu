@@ -147,7 +147,7 @@ dependencyManagement {
       entry 'tuweni-units'
     }
 
-    dependency 'org.assertj:assertj-core:3.24.2'
+    dependency 'org.assertj:assertj-core:3.27.7'
 
     dependency 'org.awaitility:awaitility:4.2.0'
 

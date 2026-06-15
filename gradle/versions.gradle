@@ -60,7 +60,7 @@ dependencyManagement {
 
     dependency 'commons-io:commons-io:2.11.0'
 
-    dependency 'dnsjava:dnsjava:3.5.2'
+    dependency 'dnsjava:dnsjava:3.6.0'
 
     dependencySet(group: 'info.picocli', version: '4.7.1') {
       entry 'picocli'

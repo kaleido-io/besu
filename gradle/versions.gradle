@@ -58,7 +58,7 @@ dependencyManagement {
 
     dependency 'commons-codec:commons-codec:1.15'
 
-    dependency 'commons-io:commons-io:2.11.0'
+    dependency 'commons-io:commons-io:2.14.0'
 
     dependency 'dnsjava:dnsjava:3.5.2'
 

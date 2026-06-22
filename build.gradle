@@ -222,6 +222,8 @@ configure(allprojects - project(':platform')) {
     resolutionStrategy.capabilitiesResolution.withCapability('org.bouncycastle:bcpkix-jdk18on') {
       selectHighestVersion()
     }
+    // CVE-2025-67030: transitive via maven-artifact
+    resolutionStrategy.force 'org.codehaus.plexus:plexus-utils:3.6.1'
 
     // transitive versions conflict with io.protocols.tuweni, prefer ours
     exclude group: 'io.tmio', module: 'tuweni-bytes'

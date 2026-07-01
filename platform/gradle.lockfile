@@ -1,0 +1,17 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson:jackson-bom:2.21.4=classpath
+io.grpc:grpc-bom:1.79.0=classpath
+io.netty:netty-bom:4.2.15.Final=classpath
+io.opentelemetry:opentelemetry-bom-alpha:1.62.0-alpha=classpath
+io.opentelemetry:opentelemetry-bom:1.62.0=classpath
+io.prometheus:prometheus-metrics-bom:1.5.0=classpath
+io.vertx:vertx-stack-depchain:4.5.24=classpath
+org.apache.logging.log4j:log4j-bom:2.25.4=classpath
+org.assertj:assertj-bom:3.27.7=classpath
+org.immutables:bom:2.12.1=classpath
+org.junit:junit-bom:5.13.4=classpath
+org.mockito:mockito-bom:5.21.0=classpath
+org.slf4j:slf4j-bom:2.0.17=classpath
+empty=annotationProcessor,implementation,integrationTestAnnotationProcessor,integrationTestImplementation,testSupportAnnotationProcessor,testSupportArtifacts,testSupportImplementation

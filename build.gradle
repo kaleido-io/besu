@@ -552,6 +552,27 @@ ext.forEachProjectSourceArtifact = { Project proj, Closure action ->
 // these are registered per-project rather than resolved from a single root-project task, which
 // used to silently skip almost every subproject's configurations.
 allprojects { proj ->
+  // Dependency locking: pins the resolved version of every dependency in a per-project
+  // gradle.lockfile, committed to the repo so the SBOM/CVE scan (and normal builds) resolve a
+  // deterministic, reviewed set. Regenerate after any dependency change with:
+  //   ./gradlew resolveAndLockAll --write-locks
+  proj.dependencyLocking {
+    lockAllConfigurations()
+  }
+
+  proj.tasks.register('resolveAndLockAll') {
+    group = 'help'
+    description = 'Resolves all resolvable configurations, writing dependency locks (use --write-locks)'
+    notCompatibleWithConfigurationCache('Resolves configurations at execution time')
+    doFirst {
+      assert gradle.startParameter.writeDependencyLocks :
+          'resolveAndLockAll must be run with --write-locks'
+    }
+    doLast {
+      proj.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+    }
+  }
+
   proj.tasks.register('resolveProjectSourceArtifacts') {
     group = 'verification'
     description = "Resolves source artifacts for ${proj.path}'s resolvable configurations"

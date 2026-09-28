@@ -566,7 +566,7 @@ allprojects { proj ->
     notCompatibleWithConfigurationCache('Resolves configurations at execution time')
     doFirst {
       assert gradle.startParameter.writeDependencyLocks :
-          'resolveAndLockAll must be run with --write-locks'
+      'resolveAndLockAll must be run with --write-locks'
     }
     doLast {
       proj.configurations.findAll { it.canBeResolved }.each { it.resolve() }

@@ -1,8 +1,8 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
-com.fasterxml.jackson.core:jackson-core:2.21.6=compileClasspath,integrationTestImplementation,runtimeClasspath,testCompileClasspath,testRuntimeClasspath,testSupportImplementation
-com.fasterxml.jackson:jackson-bom:2.21.6=annotationProcessor,compileClasspath,integrationTestAnnotationProcessor,integrationTestImplementation,runtimeClasspath,testAnnotationProcessor,testCompileClasspath,testRuntimeClasspath,testSupportAnnotationProcessor,testSupportImplementation
+com.fasterxml.jackson.core:jackson-core:2.21.7=compileClasspath,integrationTestImplementation,runtimeClasspath,testCompileClasspath,testRuntimeClasspath,testSupportImplementation
+com.fasterxml.jackson:jackson-bom:2.21.7=annotationProcessor,compileClasspath,integrationTestAnnotationProcessor,integrationTestImplementation,runtimeClasspath,testAnnotationProcessor,testCompileClasspath,testRuntimeClasspath,testSupportAnnotationProcessor,testSupportImplementation
 com.github.ben-manes.caffeine:caffeine:3.2.3=annotationProcessor,integrationTestAnnotationProcessor,integrationTestImplementation,runtimeClasspath,testAnnotationProcessor,testRuntimeClasspath,testSupportAnnotationProcessor,testSupportImplementation
 com.github.kevinstern:software-and-algorithms:1.0=annotationProcessor,integrationTestAnnotationProcessor,testAnnotationProcessor,testSupportAnnotationProcessor
 com.google.android:annotations:4.1.1.4=integrationTestImplementation,runtimeClasspath,testRuntimeClasspath,testSupportImplementation

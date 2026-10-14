@@ -68,6 +68,7 @@ import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.api.trace.TracerProvider;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapGetter;
 import io.opentelemetry.context.propagation.TextMapPropagator;
@@ -107,10 +108,13 @@ public class EngineJsonRpcService {
   private static final InetSocketAddress EMPTY_SOCKET_ADDRESS = new InetSocketAddress("0.0.0.0", 0);
   private static final String APPLICATION_JSON = "application/json";
 
+  // The last propagator to find a valid span context wins, so W3C trace context takes precedence
+  // over Jaeger and B3 when a request carries more than one format.
   private static final TextMapPropagator traceFormats =
       TextMapPropagator.composite(
           JaegerPropagator.getInstance(),
           B3Propagator.injectingSingleHeader(),
+          W3CTraceContextPropagator.getInstance(),
           W3CBaggagePropagator.getInstance());
 
   private static final TextMapGetter<HttpServerRequest> requestAttributesGetter =

@@ -27,6 +27,7 @@ import org.hyperledger.besu.tests.acceptance.dsl.node.configuration.BesuNodeConf
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -250,5 +251,71 @@ public class OpenTelemetryAcceptanceTest extends AcceptanceTestBase {
             fakeTracesCollector.getReceivedSpans().clear();
           }
         });
+  }
+
+  @Test
+  public void traceReportingWithW3cTraceContext() {
+    final String traceId = "4bf92f3577b34da6a3ce929d0e0e4736";
+    final String parentSpanId = "00f067aa0ba902b7";
+    WaitUtils.waitFor(
+        60,
+        () -> {
+          postNetVersion(Map.of("traceparent", "00-" + traceId + "-" + parentSpanId + "-01"));
+          final List<Span> serverSpans = serverSpansWithTraceId(traceId);
+          assertThat(serverSpans).isNotEmpty();
+          assertThat(HexFormat.of().formatHex(serverSpans.get(0).getParentSpanId().toByteArray()))
+              .isEqualTo(parentSpanId);
+        });
+  }
+
+  @Test
+  public void w3cTraceContextTakesPrecedenceOverJaegerAndB3() {
+    final String w3cTraceId = "0af7651916cd43dd8448eb211c80319c";
+    final String b3TraceId = "463ac35c9f6413ad48485a3953bb6124";
+    final String jaegerTraceId = "a3ce929d0e0e47364bf92f3577b34da6";
+    WaitUtils.waitFor(
+        60,
+        () -> {
+          postNetVersion(
+              Map.of(
+                  "uber-trace-id", jaegerTraceId + ":00f067aa0ba902b7:0:1",
+                  "b3", b3TraceId + "-a2fb4a1d1a96d312-1",
+                  "traceparent", "00-" + w3cTraceId + "-b7ad6b7169203331-01"));
+          assertThat(serverSpansWithTraceId(w3cTraceId)).isNotEmpty();
+          assertThat(serverSpansWithTraceId(b3TraceId)).isEmpty();
+          assertThat(serverSpansWithTraceId(jaegerTraceId)).isEmpty();
+        });
+  }
+
+  private void postNetVersion(final Map<String, String> headers) throws Exception {
+    final Duration timeout = Duration.ofSeconds(1);
+    final OkHttpClient client =
+        new OkHttpClient.Builder()
+            .connectTimeout(timeout)
+            .readTimeout(timeout)
+            .writeTimeout(timeout)
+            .build();
+    final Request.Builder request =
+        new Request.Builder()
+            .url("http://localhost:" + metricsNode.getJsonRpcPort().get())
+            .post(
+                RequestBody.create(
+                    "{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":255}",
+                    MediaType.get("application/json")));
+    headers.forEach(request::header);
+    try (Response response = client.newCall(request.build()).execute()) {
+      assertThat(response.code()).isEqualTo(200);
+    }
+  }
+
+  private List<Span> serverSpansWithTraceId(final String traceId) {
+    return new ArrayList<>(fakeTracesCollector.getReceivedSpans())
+        .stream()
+            .flatMap(resourceSpans -> resourceSpans.getScopeSpansList().stream())
+            .flatMap(scopeSpans -> scopeSpans.getSpansList().stream())
+            .filter(span -> span.getKind() == Span.SpanKind.SPAN_KIND_SERVER)
+            .filter(
+                span -> HexFormat.of().formatHex(span.getTraceId().toByteArray()).equals(traceId))
+            .toList();
   }
 }

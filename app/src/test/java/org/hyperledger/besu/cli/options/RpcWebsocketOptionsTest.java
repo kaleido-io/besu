@@ -287,4 +287,32 @@ public class RpcWebsocketOptionsTest extends CommandTestAbstract {
     assertThat(commandOutput.toString(UTF_8)).isEmpty();
     assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
   }
+
+  @Test
+  public void rpcWsSslPasswordFilesFromTomlMustBeUsed() throws IOException {
+    final Path toml =
+        createTempFile(
+            "toml",
+            ("rpc-ws-enabled = true\n"
+                    + "rpc-ws-ssl-enabled = true\n"
+                    + "rpc-ws-ssl-client-auth-enabled = true\n"
+                    + "rpc-ws-ssl-keystore-file = '/tmp/keystore.p12'\n"
+                    + "rpc-ws-ssl-keystore-password-file = '/tmp/keystore-password'\n"
+                    + "rpc-ws-ssl-truststore-file = '/tmp/truststore.p12'\n"
+                    + "rpc-ws-ssl-truststore-password-file = '/tmp/truststore-password'\n")
+                .getBytes(UTF_8));
+
+    parseCommand("--config-file", toml.toString());
+
+    verify(mockRunnerBuilder).webSocketConfiguration(wsRpcConfigArgumentCaptor.capture());
+    verify(mockRunnerBuilder).build();
+
+    assertThat(wsRpcConfigArgumentCaptor.getValue().getKeyStorePasswordFile())
+        .contains("/tmp/keystore-password");
+    assertThat(wsRpcConfigArgumentCaptor.getValue().getTrustStorePasswordFile())
+        .contains("/tmp/truststore-password");
+
+    assertThat(commandOutput.toString(UTF_8)).isEmpty();
+    assertThat(commandErrorOutput.toString(UTF_8)).isEmpty();
+  }
 }

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Bug fixes
+- Fix JSON-RPC active-connection counter leaks on the Engine API, HTTP, and WebSocket services. Rejected connections no longer increment the count or register a close handler; abrupt WebSocket disconnects (including TCP RST mid-response) now release the counter exactly once; rejection logs print `{current}/{max}`; and the Engine API exposes `besu_rpc_active_engine_connection_count` like the existing HTTP/WS gauges. Without this, counters could climb until `--rpc-*-max-active-connections` blocked all new clients (including a consensus client on the Engine API). [#11453](https://github.com/besu-eth/besu/pull/11453)
+
+### Additions and Improvements
+- `--rpc-http-max-active-connections` and `--rpc-ws-max-active-connections` accept `0` as unlimited (same convention as `--rpc-ws-max-active-subscriptions`). Negative values are rejected. [#11453](https://github.com/besu-eth/besu/pull/11453)
+
 ## 26.9.0
 
 This release contains security fixes. Operators are advised to upgrade promptly.

@@ -134,6 +134,12 @@ licenseReport {
   ]
 }
 
+allprojects {
+  dependencyLocking {
+    lockAllConfigurations()
+  }
+}
+
 configure(allprojects - project(':platform')) {
   apply plugin: 'java-library'
   apply plugin: 'jacoco'

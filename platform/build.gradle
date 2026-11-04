@@ -39,6 +39,7 @@ dependencies {
   api platform('org.jetbrains.kotlin:kotlin-bom:2.4.0')
   api platform('org.mockito:mockito-bom:5.21.0')
   api platform('org.slf4j:slf4j-bom:2.0.17')
+  api platform('tools.jackson:jackson-bom:3.1.7')
 
   constraints {
     api project(':acceptance-tests:dsl')
@@ -202,7 +203,7 @@ dependencies {
     api 'org.web3j:core:5.0.3'
     api 'org.web3j:crypto:5.0.3'
 
-    api 'org.xerial.snappy:snappy-java:1.1.10.7'
+    api 'org.xerial.snappy:snappy-java:1.1.10.9'
 
     api 'io.consensys.protocols:jc-kzg-4844:2.1.8'
 
